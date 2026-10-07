@@ -1,0 +1,692 @@
+const books = [
+  {
+    id: 1,
+    title: "Marketing Digital pour Débutants",
+    category: "business",
+    price: 19990,
+    tag: "Business",
+    description:
+      "Apprenez à construire une présence digitale, attirer des clients et développer une activité rentable.",
+    author: "M. Sory",
+    pages: 120,
+    learning: [
+      "Créer une offre claire",
+      "Attirer du trafic gratuitement",
+      "Convertir les visiteurs en clients"
+    ],
+    chapters: [
+      "Introduction au marketing digital",
+      "Positionnement et stratégie",
+      "Canaux de prospection",
+      "Conversion et fidélisation"
+    ]
+  },
+  {
+    id: 2,
+    title: "Trading Intelligent",
+    category: "trading",
+    price: 24990,
+    tag: "Trading",
+    description:
+      "Découvrez une méthode simple pour comprendre les tendances du marché sans stress.",
+    author: "K. Samba",
+    pages: 160,
+    learning: [
+      "Lire les graphiques",
+      "Gérer le risque",
+      "Identifier les opportunités"
+    ],
+    chapters: [
+      "Les bases du trading",
+      "Analyse technique",
+      "Gestion des risques",
+      "Plan de trading"
+    ]
+  },
+  {
+    id: 3,
+    title: "Finance Personnelle 2024",
+    category: "finance",
+    price: 17500,
+    tag: "Finance",
+    description:
+      "Apprenez à mieux gérer votre argent, budgétiser et construire une sécurité financière.",
+    author: "A. Diallo",
+    pages: 110,
+    learning: [
+      "Budgetiser correctement",
+      "Réaliser un plan d’épargne",
+      "Comprendre les investissements"
+    ],
+    chapters: [
+      "Gérer son budget",
+      "Investir sans panique",
+      "Créer des habitudes financières"
+    ]
+  },
+  {
+    id: 4,
+    title: "Le Pouvoir de la Discipline",
+    category: "motivation",
+    price: 15990,
+    tag: "Motivation",
+    description:
+      "Une lecture inspirante pour renforcer la concentration, la confiance et l’exécution.",
+    author: "N. Fofana",
+    pages: 90,
+    learning: [
+      "S’organiser efficacement",
+      "Gagner en motivation",
+      "Fidéliser ses habitudes"
+    ],
+    chapters: [
+      "Pourquoi on échoue",
+      "Créer des routines",
+      "Gagner en énergie"
+    ]
+  },
+  {
+    id: 5,
+    title: "Entrepreneuriat Sans Peur",
+    category: "entrepreneuriat",
+    price: 21990,
+    tag: "Entrepreneuriat",
+    description:
+      "Un guide pratique pour lancer une activité et faire grandir une idée solide.",
+    author: "Y. Soumah",
+    pages: 140,
+    learning: [
+      "Valider une idée",
+      "Créer un modèle rentable",
+      "Construire une marque"
+    ],
+    chapters: [
+      "Trouver une idée viable",
+      "Créer le business model",
+      "Lancer et faire évoluer"
+    ]
+  },
+  {
+    id: 6,
+    title: "Confiance en Soi",
+    category: "personnel",
+    price: 18990,
+    tag: "Développement personnel",
+    description:
+      "Développez votre confiance intérieure et passez de l’incertitude à l’action.",
+    author: "R. Konaté",
+    pages: 100,
+    learning: [
+      "Renforcer votre confiance",
+      "Mieux communiquer",
+      "Se libérer de l’incertitude"
+    ],
+    chapters: [
+      "Comprendre la peur",
+      "Renforcer votre identité",
+      "Agir malgré le doute"
+    ]
+  }
+];
+
+const appPages = ["books.html", "product.html", "checkout.html", "profile.html"];
+
+function formatFCFA(value) {
+  return `${Number(value).toLocaleString("fr-FR")} FCFA`;
+}
+
+function getCurrentUser() {
+  const user = localStorage.getItem("nexaCurrentUser");
+  return user ? JSON.parse(user) : null;
+}
+
+function ensureAuth() {
+  const currentUser = getCurrentUser();
+  const isIndexPage = window.location.pathname.endsWith("index.html") || window.location.pathname === "/";
+  const isAuthPage = window.location.pathname.endsWith("index.html");
+
+  if (!currentUser && !isAuthPage) {
+    window.location.href = "index.html";
+    return false;
+  }
+
+  if (currentUser && isAuthPage) {
+    window.location.href = "books.html";
+    return false;
+  }
+
+  return true;
+}
+
+function hashPassword(password) {
+  return btoa(password + "_nexa_secure_");
+}
+
+function getUsers() {
+  return JSON.parse(localStorage.getItem("nexaUsers")) || [];
+}
+
+function saveUser(user) {
+  const users = getUsers();
+  users.push(user);
+  localStorage.setItem("nexaUsers", JSON.stringify(users));
+}
+
+function loginUser(email, password) {
+  const users = getUsers();
+  const found = users.find(
+    (u) =>
+      u.email.toLowerCase() === email.toLowerCase() &&
+      u.password === hashPassword(password)
+  );
+  if (!found) return false;
+
+  localStorage.setItem("nexaCurrentUser", JSON.stringify(found));
+  return true;
+}
+
+function registerUser(data) {
+  const users = getUsers();
+  const exists = users.some((u) => u.email.toLowerCase() === data.email.toLowerCase());
+
+  if (exists) {
+    alert("Un compte existe déjà avec cet e-mail.");
+    return false;
+  }
+
+  const user = {
+    ...data,
+    password: hashPassword(data.password)
+  };
+
+  saveUser(user);
+  localStorage.setItem("nexaCurrentUser", JSON.stringify(user));
+  return true;
+}
+
+function logout() {
+  localStorage.removeItem("nexaCurrentUser");
+  window.location.href = "index.html";
+}
+
+function getCart(userEmail) {
+  const key = `nexaCart_${userEmail}`;
+  const raw = localStorage.getItem(key);
+  return raw ? JSON.parse(raw) : [];
+}
+
+function setCart(userEmail, cart) {
+  localStorage.setItem(`nexaCart_${userEmail}`, JSON.stringify(cart));
+}
+
+function getPurchased(userEmail) {
+  const key = `nexaPurchased_${userEmail}`;
+  const raw = localStorage.getItem(key);
+  return raw ? JSON.parse(raw) : [];
+}
+
+function setPurchased(userEmail, items) {
+  localStorage.setItem(`nexaPurchased_${userEmail}`, JSON.stringify(items));
+}
+
+// Page login/register
+if (document.getElementById("registerForm")) {
+  const registerForm = document.getElementById("registerForm");
+  const loginForm = document.getElementById("loginForm");
+
+  document.getElementById("showLogin").addEventListener("click", (e) => {
+    e.preventDefault();
+    registerForm.classList.add("hidden");
+    loginForm.classList.remove("hidden");
+  });
+
+  document.getElementById("showRegister").addEventListener("click", (e) => {
+    e.preventDefault();
+    loginForm.classList.add("hidden");
+    registerForm.classList.remove("hidden");
+  });
+
+  registerForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const nationality = document.getElementById("nationality").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const accepted = document.getElementById("terms").checked;
+
+    if (!firstName || !lastName || !nationality || !phone || !email || !password) {
+      alert("Veuillez remplir tous les champs obligatoires.");
+      return;
+    }
+
+    if (!accepted) {
+      alert("Vous devez accepter les conditions d’utilisation.");
+      return;
+    }
+
+    if (password.length < 6) {
+      alert("Le mot de passe doit contenir au moins 6 caractères.");
+      return;
+    }
+
+    const success = registerUser({
+      firstName,
+      lastName,
+      nationality,
+      phone,
+      email,
+      password
+    });
+
+    if (success) {
+      window.location.href = "books.html";
+    }
+  });
+
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    if (!email || !password) {
+      alert("Veuillez remplir les champs.");
+      return;
+    }
+
+    const ok = loginUser(email, password);
+
+    if (ok) {
+      window.location.href = "books.html";
+    } else {
+      alert("E-mail ou mot de passe incorrect.");
+    }
+  });
+
+  ensureAuth();
+}
+
+// Auth guard for protected pages
+if (appPages.some((page) => window.location.pathname.endsWith(page))) {
+  ensureAuth();
+}
+
+// Navigation & common behavior
+if (document.getElementById("logoutBtn")) {
+  document.getElementById("logoutBtn").addEventListener("click", logout);
+}
+
+function updateCartCount() {
+  const cartCount = document.getElementById("cartCount");
+  if (!cartCount) return;
+
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const cart = getCart(user.email);
+  const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+  cartCount.textContent = totalQty;
+}
+
+function addToCart(bookId) {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const cart = getCart(user.email);
+  const existing = cart.find((item) => item.id === bookId);
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    const book = books.find((b) => b.id === bookId);
+    cart.push({ ...book, quantity: 1 });
+  }
+
+  setCart(user.email, cart);
+  updateCartCount();
+}
+
+function removeFromCart(bookId) {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const cart = getCart(user.email).filter((item) => item.id !== bookId);
+  setCart(user.email, cart);
+  renderCart();
+}
+
+function updateCartItemQuantity(bookId, delta) {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const cart = getCart(user.email);
+  const item = cart.find((entry) => entry.id === bookId);
+
+  if (!item) return;
+
+  item.quantity += delta;
+
+  if (item.quantity <= 0) {
+    const filtered = cart.filter((entry) => entry.id !== bookId);
+    setCart(user.email, filtered);
+  } else {
+    setCart(user.email, cart);
+  }
+
+  renderCart();
+}
+
+function getCartTotal() {
+  const user = getCurrentUser();
+  if (!user) return { subtotal: 0, fees: 0, total: 0 };
+
+  const cart = getCart(user.email);
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const fees = cart.length ? 1500 : 0;
+  const total = subtotal + fees;
+
+  return { subtotal, fees, total };
+}
+
+function renderCart() {
+  const cartItemsContainer = document.getElementById("cartItems");
+  if (!cartItemsContainer) return;
+
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const cart = getCart(user.email);
+
+  if (!cart.length) {
+    cartItemsContainer.innerHTML = "<p>Votre panier est vide.</p>";
+    document.getElementById("subtotal").textContent = "0 FCFA";
+    document.getElementById("fees").textContent = "0 FCFA";
+    document.getElementById("total").textContent = "0 FCFA";
+    return;
+  }
+
+  cartItemsContainer.innerHTML = "";
+
+  cart.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "cart-item";
+
+    row.innerHTML = `
+      <div>
+        <h3>${item.title}</h3>
+        <div class="price">${formatFCFA(item.price)}</div>
+      </div>
+      <div class="item-controls">
+        <button class="qty-btn" data-action="minus" data-id="${item.id}">-</button>
+        <span>${item.quantity}</span>
+        <button class="qty-btn" data-action="plus" data-id="${item.id}">+</button>
+      </div>
+    `;
+
+    cartItemsContainer.appendChild(row);
+  });
+
+  document.querySelectorAll(".qty-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = Number(btn.dataset.id);
+      const action = btn.dataset.action;
+      if (action === "plus") updateCartItemQuantity(id, 1);
+      if (action === "minus") updateCartItemQuantity(id, -1);
+    });
+  });
+
+  const totals = getCartTotal();
+
+  document.getElementById("subtotal").textContent = formatFCFA(totals.subtotal);
+  document.getElementById("fees").textContent = formatFCFA(totals.fees);
+  document.getElementById("total").textContent = formatFCFA(totals.total);
+}
+
+if (document.getElementById("payBtn")) {
+  document.getElementById("payBtn").addEventListener("click", () => {
+    const user = getCurrentUser();
+    if (!user) return;
+
+    const cart = getCart(user.email);
+
+    if (!cart.length) {
+      alert("Votre panier est vide.");
+      return;
+    }
+
+    const paymentModal = document.getElementById("paymentModal");
+    paymentModal.classList.remove("hidden");
+  });
+}
+
+if (document.getElementById("closePayment")) {
+  document.getElementById("closePayment").addEventListener("click", () => {
+    document.getElementById("paymentModal").classList.add("hidden");
+  });
+}
+
+if (document.getElementById("confirmPayment")) {
+  document.getElementById("confirmPayment").addEventListener("click", () => {
+    const user = getCurrentUser();
+    if (!user) return;
+
+    const cart = getCart(user.email);
+    if (!cart.length) {
+      alert("Votre panier est vide.");
+      return;
+    }
+
+    const paymentPhone = document.getElementById("paymentPhone").value.trim();
+    const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+
+    if (!paymentPhone) {
+      alert("Veuillez saisir votre numéro pour le paiement.");
+      return;
+    }
+
+    const purchased = getPurchased(user.email);
+    const titles = cart.map((item) => item.title);
+
+    setPurchased(user.email, [...purchased, ...titles]);
+
+    setCart(user.email, []);
+    document.getElementById("paymentModal").classList.add("hidden");
+    alert(`Paiement via ${selectedMethod} confirmé. Votre commande a bien été enregistrée.`);
+    window.location.href = "profile.html";
+  });
+}
+
+function renderBooksPage() {
+  const booksGrid = document.getElementById("booksGrid");
+  if (!booksGrid) return;
+
+  let filter = "all";
+  let search = "";
+
+  const update = () => {
+    const filtered = books.filter((book) => {
+      const matchCategory = filter === "all" || book.category === filter;
+      const matchText =
+        !search ||
+        book.title.toLowerCase().includes(search.toLowerCase()) ||
+        book.description.toLowerCase().includes(search.toLowerCase());
+
+      return matchCategory && matchText;
+    });
+
+    booksGrid.innerHTML = "";
+
+    if (!filtered.length) {
+      booksGrid.innerHTML = "<p>Aucun livre trouvé.</p>";
+      return;
+    }
+
+    filtered.forEach((book) => {
+      const card = document.createElement("article");
+      card.className = "book-card";
+
+      card.innerHTML = `
+        <div class="book-cover">${book.title.slice(0, 2).toUpperCase()}</div>
+        <div class="book-body">
+          <div class="book-meta">
+            <span class="book-tag">${book.tag}</span>
+            <span class="price">${formatFCFA(book.price)}</span>
+          </div>
+          <h3>${book.title}</h3>
+          <p>${book.description}</p>
+          <div class="book-actions">
+            <button class="view-btn" data-id="${book.id}">Voir le livre</button>
+            <button class="buy-btn" data-id="${book.id}">Acheter</button>
+          </div>
+        </div>
+      `;
+
+      booksGrid.appendChild(card);
+    });
+
+    document.querySelectorAll(".view-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = Number(btn.dataset.id);
+        window.location.href = `product.html?id=${id}`;
+      });
+    });
+
+    document.querySelectorAll(".buy-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        addToCart(Number(btn.dataset.id));
+        window.location.href = "checkout.html";
+      });
+    });
+  };
+
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      search = e.target.value.trim();
+      update();
+    });
+  }
+
+  document.querySelectorAll(".filter-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      filter = button.dataset.filter;
+      document.querySelectorAll(".filter-btn").forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+      update();
+    });
+  });
+
+  update();
+  updateCartCount();
+}
+
+function renderProductPage() {
+  const productDetail = document.getElementById("productDetail");
+  if (!productDetail) return;
+
+  const url = new URL(window.location.href);
+  const id = Number(url.searchParams.get("id"));
+  const book = books.find((b) => b.id === id);
+
+  if (!book) {
+    productDetail.innerHTML = "<p>Produit introuvable.</p>";
+    return;
+  }
+
+  productDetail.innerHTML = `
+    <div class="product-layout">
+      <div class="detail-cover">${book.title.slice(0, 2).toUpperCase()}</div>
+
+      <div class="product-info">
+        <div class="product-top">
+          <span class="book-tag">${book.tag}</span>
+          <strong class="price">${formatFCFA(book.price)}</strong>
+        </div>
+
+        <h1>${book.title}</h1>
+        <p>${book.description}</p>
+
+        <ul class="product-features">
+          <li><strong>Auteur :</strong> ${book.author}</li>
+          <li><strong>Pages :</strong> ${book.pages}</li>
+          <li><strong>Catégorie :</strong> ${book.tag}</li>
+        </ul>
+
+        <div class="product-actions">
+          <button class="secondary-btn" onclick="window.location.href='books.html'">Retour</button>
+          <button class="primary-btn" id="buyBookBtn">Acheter maintenant</button>
+        </div>
+
+        <h3>Ce que vous allez apprendre</h3>
+        <ul class="benefit-list">
+          ${book.learning.map((item) => `<li>${item}</li>`).join("")}
+        </ul>
+
+        <h3>Chapitres</h3>
+        <ul class="chapter-list">
+          ${book.chapters.map((item) => `<li>${item}</li>`).join("")}
+        </ul>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("buyBookBtn").addEventListener("click", () => {
+    addToCart(id);
+    window.location.href = "checkout.html";
+  });
+
+  updateCartCount();
+}
+
+function renderProfilePage() {
+  const profileInfo = document.getElementById("profileInfo");
+  const purchasedList = document.getElementById("purchasedList");
+
+  if (!profileInfo || !purchasedList) return;
+
+  const user = getCurrentUser();
+  if (!user) return;
+
+  profileInfo.innerHTML = `
+    <p><strong>Prénom :</strong> ${user.firstName}</p>
+    <p><strong>Nom :</strong> ${user.lastName}</p>
+    <p><strong>E-mail :</strong> ${user.email}</p>
+    <p><strong>Nationalité :</strong> ${user.nationality}</p>
+    <p><strong>Téléphone :</strong> ${user.phone}</p>
+  `;
+
+  const purchased = getPurchased(user.email);
+
+  if (!purchased.length) {
+    purchasedList.innerHTML = "<li>Aucun achat pour le moment.</li>";
+    return;
+  }
+
+  purchasedList.innerHTML = purchased.map((title) => `<li>${title}</li>`).join("");
+  updateCartCount();
+}
+
+if (window.location.pathname.endsWith("books.html")) {
+  renderBooksPage();
+}
+
+if (window.location.pathname.endsWith("product.html")) {
+  renderProductPage();
+}
+
+if (window.location.pathname.endsWith("checkout.html")) {
+  renderCart();
+  updateCartCount();
+}
+
+if (window.location.pathname.endsWith("profile.html")) {
+  renderProfilePage();
+  updateCartCount();
+}
+
+if (document.getElementById("cartCount")) {
+  updateCartCount();
+}
