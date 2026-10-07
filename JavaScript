@@ -1,0 +1,606 @@
+const books = [
+  {
+    id: 1,
+    title: "Marketing Digital pour Débutants",
+    category: "business",
+    price: 19.99,
+    tag: "Business",
+    description: "Apprenez à construire une présence digitale, attirer des clients et développer une activité rentable.",
+    author: "M. Sory",
+    pages: 120,
+    learning: [
+      "Créer une offre claire",
+      "Attirer du trafic gratuitement",
+      "Convertir les visiteurs en clients"
+    ],
+    chapters: [
+      "Introduction au marketing digital",
+      "Positionnement et stratégie",
+      "Canaux de prospection",
+      "Conversion et fidélisation"
+    ]
+  },
+  {
+    id: 2,
+    title: "Trading Intelligent",
+    category: "trading",
+    price: 24.99,
+    tag: "Trading",
+    description: "Découvrez une méthode simple pour comprendre les tendances du marché sans stress.",
+    author: "K. Samba",
+    pages: 160,
+    learning: [
+      "Lire les graphiques",
+      "Gérer le risque",
+      "Identifier les opportunités"
+    ],
+    chapters: [
+      "Les bases du trading",
+      "Analyse technique",
+      "Gestion des risques",
+      "Plan de trading"
+    ]
+  },
+  {
+    id: 3,
+    title: "Finance Personnelle 2024",
+    category: "finance",
+    price: 17.99,
+    tag: "Finance",
+    description: "Apprenez à mieux gérer votre argent, budgétiser et construire une sécurité financière.",
+    author: "A. Diallo",
+    pages: 110,
+    learning: [
+      "Budgetiser correctement",
+      "Réaliser un plan d’épargne",
+      "Comprendre les investissements"
+    ],
+    chapters: [
+      "Gérer son budget",
+      "Investir sans panique",
+      "Créer des habitudes financières"
+    ]
+  },
+  {
+    id: 4,
+    title: "Le Pouvoir de la Discipline",
+    category: "motivation",
+    price: 15.99,
+    tag: "Motivation",
+    description: "Une lecture inspirante pour renforcer la concentration, la confiance et l’exécution.",
+    author: "N. Fofana",
+    pages: 90,
+    learning: [
+      "S’organiser efficacement",
+      "Gagner en motivation",
+      "Fidéliser ses habitudes"
+    ],
+    chapters: [
+      "Pourquoi on échoue",
+      "Créer des routines",
+      "Gagner en énergie"
+    ]
+  },
+  {
+    id: 5,
+    title: "Entrepreneuriat Sans Peur",
+    category: "entrepreneuriat",
+    price: 21.99,
+    tag: "Entrepreneuriat",
+    description: "Un guide pratique pour lancer une activité et faire grandir une idée solide.",
+    author: "Y. Soumah",
+    pages: 140,
+    learning: [
+      "Valider une idée",
+      "Créer un modèle rentable",
+      "Construire une marque"
+    ],
+    chapters: [
+      "Trouver une idée viable",
+      "Créer le business model",
+      "Lancer et faire évoluer"
+    ]
+  },
+  {
+    id: 6,
+    title: "Confiance en Soi",
+    category: "personnel",
+    price: 18.99,
+    tag: "Développement personnel",
+    description: "Développez votre confiance intérieure et passez de l’incertitude à l’action.",
+    author: "R. Konaté",
+    pages: 100,
+    learning: [
+      "Renforcer votre confiance",
+      "Mieux communiquer",
+      "Se libérer de l’incertitude"
+    ],
+    chapters: [
+      "Comprendre la peur",
+      "Renforcer votre identité",
+      "Agir malgré le doute"
+    ]
+  }
+];
+
+const cart = [];
+let selectedFilter = "all";
+let searchKeyword = "";
+
+const authScreen = document.getElementById("authScreen");
+const app = document.getElementById("app");
+
+const registerForm = document.getElementById("registerForm");
+const loginForm = document.getElementById("loginForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+
+const showLogin = document.getElementById("showLogin");
+const showRegister = document.getElementById("showRegister");
+const forgotPassword = document.getElementById("forgotPassword");
+
+const logoutBtn = document.getElementById("logoutBtn");
+const cartBtn = document.getElementById("cartBtn");
+const profileBtn = document.getElementById("profileBtn");
+const cartModal = document.getElementById("cartModal");
+const paymentModal = document.getElementById("paymentModal");
+const profileModal = document.getElementById("profileModal");
+
+const booksGrid = document.getElementById("booksGrid");
+const cartItems = document.getElementById("cartItems");
+const subtotalEl = document.getElementById("subtotal");
+const feesEl = document.getElementById("fees");
+const totalEl = document.getElementById("total");
+const cartCount = document.getElementById("cartCount");
+
+const searchInput = document.getElementById("searchInput");
+const filterButtons = document.querySelectorAll(".filter-btn");
+
+const profileFirstName = document.getElementById("profileFirstName");
+const profileLastName = document.getElementById("profileLastName");
+const profileEmail = document.getElementById("profileEmail");
+const profileNationality = document.getElementById("profileNationality");
+const profilePhone = document.getElementById("profilePhone");
+const purchasedList = document.getElementById("purchasedList");
+
+let currentUser = null;
+
+// ---------- AUTH ----------
+function hashPassword(password) {
+  return btoa(password + "_nexa_secure_");
+}
+
+function saveUser(user) {
+  const users = JSON.parse(localStorage.getItem("nexaUsers")) || [];
+  users.push(user);
+  localStorage.setItem("nexaUsers", JSON.stringify(users));
+}
+
+function getUsers() {
+  return JSON.parse(localStorage.getItem("nexaUsers")) || [];
+}
+
+function isUserAuthenticated() {
+  return localStorage.getItem("nexaCurrentUser") !== null;
+}
+
+function loginUser(email, password) {
+  const users = getUsers();
+  const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === hashPassword(password));
+  if (user) {
+    localStorage.setItem("nexaCurrentUser", JSON.stringify(user));
+    currentUser = user;
+    return true;
+  }
+  return false;
+}
+
+function registerUser(data) {
+  const users = getUsers();
+  const exists = users.some(u => u.email.toLowerCase() === data.email.toLowerCase());
+  if (exists) {
+    alert("Un compte existe déjà avec cet e-mail.");
+    return false;
+  }
+
+  const newUser = {
+    ...data,
+    password: hashPassword(data.password)
+  };
+
+  saveUser(newUser);
+  localStorage.setItem("nexaCurrentUser", JSON.stringify(newUser));
+  currentUser = newUser;
+  return true;
+}
+
+function logout() {
+  localStorage.removeItem("nexaCurrentUser");
+  currentUser = null;
+  app.classList.add("hidden");
+  authScreen.classList.remove("hidden");
+  document.getElementById("loginForm").classList.add("hidden");
+  document.getElementById("registerForm").classList.remove("hidden");
+}
+
+function showApp() {
+  app.classList.remove("hidden");
+  authScreen.classList.add("hidden");
+}
+
+registerForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+  const nationality = document.getElementById("nationality").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const accepted = document.getElementById("terms").checked;
+
+  if (!firstName || !lastName || !nationality || !phone || !email || !password || !accepted) {
+    alert("Veuillez remplir tous les champs obligatoires et accepter les conditions.");
+    return;
+  }
+
+  if (password.length < 6) {
+    alert("Le mot de passe doit contenir au moins 6 caractères.");
+    return;
+  }
+
+  const success = registerUser({
+    firstName,
+    lastName,
+    nationality,
+    phone,
+    email,
+    password
+  });
+
+  if (success) {
+    showApp();
+    renderProfile();
+    resetCart();
+  }
+});
+
+loginForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const email = loginEmail.value.trim();
+  const password = loginPassword.value.trim();
+
+  if (!email || !password) {
+    alert("Veuillez remplir les champs.");
+    return;
+  }
+
+  if (loginUser(email, password)) {
+    showApp();
+    renderProfile();
+    resetCart();
+  } else {
+    alert("E-mail ou mot de passe incorrect.");
+  }
+});
+
+showLogin.addEventListener("click", function (e) {
+  e.preventDefault();
+  registerForm.classList.add("hidden");
+  loginForm.classList.remove("hidden");
+});
+
+showRegister.addEventListener("click", function (e) {
+  e.preventDefault();
+  loginForm.classList.add("hidden");
+  registerForm.classList.remove("hidden");
+});
+
+forgotPassword.addEventListener("click", function (e) {
+  e.preventDefault();
+  alert("Réinitialisation du mot de passe : contactez le support ou utilisez un mot de passe temporaire.");
+});
+
+logoutBtn.addEventListener("click", logout);
+
+// ---------- CART ----------
+function resetCart() {
+  if (!currentUser) return;
+  const saved = JSON.parse(localStorage.getItem("nexaCart_" + currentUser.email)) || [];
+  // not used for demo
+  renderCart();
+}
+
+function addToCart(bookId) {
+  const item = cart.find(b => b.id === bookId);
+  if (item) {
+    item.quantity += 1;
+  } else {
+    cart.push({ ...books.find(b => b.id === bookId), quantity: 1 });
+  }
+  renderCart();
+}
+
+function removeFromCart(bookId) {
+  const index = cart.findIndex(item => item.id === bookId);
+  if (index >= 0) {
+    cart.splice(index, 1);
+  }
+  renderCart();
+}
+
+function updateQuantity(bookId, delta) {
+  const item = cart.find(b => b.id === bookId);
+  if (!item) return;
+  item.quantity += delta;
+  if (item.quantity <= 0) {
+    removeFromCart(bookId);
+    return;
+  }
+  renderCart();
+}
+
+function getCartTotal() {
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const fees = cart.length ? 2.5 : 0;
+  const total = subtotal + fees;
+  return { subtotal, fees, total };
+}
+
+function renderCart() {
+  cartItems.innerHTML = "";
+
+  if (cart.length === 0) {
+    cartItems.innerHTML = "<p>Votre panier est vide.</p>";
+    subtotalEl.textContent = "0,00 €";
+    feesEl.textContent = "0,00 €";
+    totalEl.textContent = "0,00 €";
+    cartCount.textContent = "0";
+    return;
+  }
+
+  cart.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "cart-item";
+
+    row.innerHTML = `
+      <div>
+        <h5>${item.title}</h5>
+        <p>${item.price.toFixed(2)} €</p>
+      </div>
+      <div class="item-controls">
+        <button class="qty-btn" data-action="minus" data-id="${item.id}">-</button>
+        <span>${item.quantity}</span>
+        <button class="qty-btn" data-action="plus" data-id="${item.id}">+</button>
+      </div>
+    `;
+
+    cartItems.appendChild(row);
+  });
+
+  document.querySelectorAll(".qty-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = Number(btn.dataset.id);
+      const action = btn.dataset.action;
+      if (action === "plus") updateQuantity(id, 1);
+      if (action === "minus") updateQuantity(id, -1);
+    });
+  });
+
+  const totals = getCartTotal();
+  subtotalEl.textContent = totals.subtotal.toFixed(2) + " €";
+  feesEl.textContent = totals.fees.toFixed(2) + " €";
+  totalEl.textContent = totals.total.toFixed(2) + " €";
+  cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0).toString();
+}
+
+cartBtn.addEventListener("click", () => {
+  cartModal.classList.remove("hidden");
+});
+
+document.getElementById("closeCart").addEventListener("click", () => {
+  cartModal.classList.add("hidden");
+});
+
+document.getElementById("continueShopping").addEventListener("click", () => {
+  cartModal.classList.add("hidden");
+});
+
+document.getElementById("checkoutBtn").addEventListener("click", () => {
+  cartModal.classList.add("hidden");
+  paymentModal.classList.remove("hidden");
+  document.getElementById("paymentAmount").textContent = getCartTotal().total.toFixed(2) + " €";
+});
+
+document.getElementById("closePayment").addEventListener("click", () => {
+  paymentModal.classList.add("hidden");
+});
+
+document.getElementById("confirmPayment").addEventListener("click", () => {
+  const paymentPhone = document.getElementById("paymentPhone").value.trim();
+  const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+  if (!paymentPhone) {
+    alert("Veuillez saisir votre numéro pour le paiement.");
+    return;
+  }
+
+  if (cart.length === 0) {
+    alert("Votre panier est vide.");
+    return;
+  }
+
+  const purchased = cart.map(item => item.title);
+  const purchasedKey = "nexaPurchased_" + currentUser.email;
+  const oldPurchases = JSON.parse(localStorage.getItem(purchasedKey)) || [];
+  const merged = [...oldPurchases, ...purchased];
+  localStorage.setItem(purchasedKey, JSON.stringify(merged));
+
+  alert(`Paiement via ${selectedMethod.toUpperCase()} confirmé. Votre commande a bien été enregistrée.`);
+  paymentModal.classList.add("hidden");
+  cart.splice(0, cart.length);
+  renderCart();
+  renderProfile();
+});
+
+profileBtn.addEventListener("click", () => {
+  renderProfile();
+  profileModal.classList.remove("hidden");
+});
+
+document.getElementById("closeProfile").addEventListener("click", () => {
+  profileModal.classList.add("hidden");
+});
+
+// ---------- BOOKS ----------
+function getFilteredBooks() {
+  return books.filter(book => {
+    const matchesCategory = selectedFilter === "all" || book.category === selectedFilter;
+    const term = searchKeyword.toLowerCase();
+    const matchesSearch = !term || book.title.toLowerCase().includes(term) || book.description.toLowerCase().includes(term);
+    return matchesCategory && matchesSearch;
+  });
+}
+
+function renderBooks() {
+  booksGrid.innerHTML = "";
+
+  const filteredBooks = getFilteredBooks();
+
+  if (filteredBooks.length === 0) {
+    booksGrid.innerHTML = "<p>Aucun livre trouvé.</p>";
+    return;
+  }
+
+  filteredBooks.forEach(book => {
+    const card = document.createElement("article");
+    card.className = "book-card";
+
+    card.innerHTML = `
+      <div class="book-cover">${book.title.split(" ")[0].slice(0, 2).toUpperCase()}</div>
+      <div class="book-info">
+        <div class="book-meta">
+          <span class="book-tag">${book.tag}</span>
+          <span class="price">${book.price.toFixed(2)} €</span>
+        </div>
+        <h4>${book.title}</h4>
+        <p>${book.description}</p>
+        <div class="book-actions">
+          <button class="view-btn" data-id="${book.id}">Voir le livre</button>
+          <button class="buy-btn" data-id="${book.id}">Acheter</button>
+        </div>
+      </div>
+    `;
+
+    booksGrid.appendChild(card);
+  });
+
+  document.querySelectorAll(".view-btn").forEach(btn => {
+    btn.addEventListener("click", () => openBookDetail(Number(btn.dataset.id)));
+  });
+
+  document.querySelectorAll(".buy-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      addToCart(Number(btn.dataset.id));
+      cartModal.classList.remove("hidden");
+    });
+  });
+}
+
+searchInput.addEventListener("input", (e) => {
+  searchKeyword = e.target.value;
+  renderBooks();
+});
+
+filterButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    selectedFilter = button.dataset.filter;
+    filterButtons.forEach(b => b.classList.toggle("active", b === button));
+    renderBooks();
+  });
+});
+
+function openBookDetail(bookId) {
+  const book = books.find(b => b.id === bookId);
+  const detailContent = document.getElementById("bookDetailContent");
+  document.getElementById("bookDetailModal").classList.remove("hidden");
+
+  detailContent.innerHTML = `
+    <div class="detail-layout">
+      <div class="detail-cover">${book.title.split(" ")[0].slice(0, 2).toUpperCase()}</div>
+      <div class="detail-info">
+        <span class="tag">${book.tag}</span>
+        <h3>${book.title}</h3>
+        <p>${book.description}</p>
+        <ul>
+          <li><strong>Auteur :</strong> ${book.author}</li>
+          <li><strong>Pages :</strong> ${book.pages}</li>
+          <li><strong>Prix :</strong> ${book.price.toFixed(2)} €</li>
+        </ul>
+        <div class="detail-actions">
+          <button class="primary-btn" data-buy="${book.id}">Acheter maintenant</button>
+        </div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h4>Ce que vous allez apprendre</h4>
+      <ul class="check-list">
+        ${book.learning.map(item => `<li>${item}</li>`).join("")}
+      </ul>
+    </div>
+    <div class="detail-section">
+      <h4>Chapitres</h4>
+      <ul class="chapter-list">
+        ${book.chapters.map(ch => `<li>${ch}</li>`).join("")}
+      </ul>
+    </div>
+  `;
+
+  document.querySelector("[data-buy]").addEventListener("click", () => {
+    addToCart(book.id);
+    document.getElementById("bookDetailModal").classList.add("hidden");
+    cartModal.classList.remove("hidden");
+  });
+}
+
+document.getElementById("closeDetailModal").addEventListener("click", () => {
+  document.getElementById("bookDetailModal").classList.add("hidden");
+});
+
+// ---------- PROFILE ----------
+function renderProfile() {
+  const user = JSON.parse(localStorage.getItem("nexaCurrentUser"));
+  if (!user) return;
+
+  profileFirstName.textContent = user.firstName;
+  profileLastName.textContent = user.lastName;
+  profileEmail.textContent = user.email;
+  profileNationality.textContent = user.nationality;
+  profilePhone.textContent = user.phone;
+
+  const purchased = JSON.parse(localStorage.getItem("nexaPurchased_" + user.email)) || [];
+  purchasedList.innerHTML = "";
+  if (!purchased.length) {
+    purchasedList.innerHTML = "<li>Aucun achat pour le moment.</li>";
+    return;
+  }
+
+  purchased.forEach(title => {
+    const li = document.createElement("li");
+    li.textContent = title;
+    purchasedList.appendChild(li);
+  });
+}
+
+// ---------- INIT ----------
+if (isUserAuthenticated()) {
+  currentUser = JSON.parse(localStorage.getItem("nexaCurrentUser"));
+  showApp();
+  renderProfile();
+} else {
+  authScreen.classList.remove("hidden");
+}
+
+renderBooks();
+renderCart();
