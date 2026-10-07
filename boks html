@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NexaBooks | E-books</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <div class="logo">NexaBooks</div>
+        <nav class="nav-links">
+          <a href="index.html">Accueil</a>
+          <a href="books.html">E-books</a>
+          <a href="checkout.html">Panier</a>
+          <a href="profile.html">Profil</a>
+        </nav>
+        <div class="nav-actions">
+          <a class="cart-btn" href="checkout.html">🛒 <span id="cartCount">0</span></a>
+          <a class="profile-btn" href="profile.html">Mon compte</a>
+          <button id="logoutBtn" class="logout-btn">Déconnexion</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="catalog-page">
+      <div class="container">
+        <div class="catalog-header">
+          <div>
+            <span class="tag">Catalogue</span>
+            <h1>Nos e-books</h1>
+          </div>
+          <input id="searchInput" type="text" placeholder="Rechercher un e-book..." />
+        </div>
+
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">Tous</button>
+          <button class="filter-btn" data-filter="trading">Trading</button>
+          <button class="filter-btn" data-filter="business">Business</button>
+          <button class="filter-btn" data-filter="finance">Finance</button>
+          <button class="filter-btn" data-filter="personnel">Développement personnel</button>
+          <button class="filter-btn" data-filter="motivation">Motivation</button>
+          <button class="filter-btn" data-filter="entrepreneuriat">Entrepreneuriat</button>
+        </div>
+
+        <div id="booksGrid" class="books-grid"></div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h4>NexaBooks</h4>
+          <p>La plateforme qui aide les esprits ambitieux à apprendre et à évoluer.</p>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="books.html">E-books</a></li>
+            <li><a href="profile.html">Profil</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Confidentialité</a></li>
+            <li><a href="#">Conditions</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
