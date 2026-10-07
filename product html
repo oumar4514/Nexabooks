@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NexaBooks | Produit</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <div class="logo">NexaBooks</div>
+        <nav class="nav-links">
+          <a href="index.html">Accueil</a>
+          <a href="books.html">E-books</a>
+          <a href="checkout.html">Panier</a>
+          <a href="profile.html">Profil</a>
+        </nav>
+        <div class="nav-actions">
+          <a class="cart-btn" href="checkout.html">🛒 <span id="cartCount">0</span></a>
+          <a class="profile-btn" href="profile.html">Mon compte</a>
+          <button id="logoutBtn" class="logout-btn">Déconnexion</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container product-page">
+      <div id="productDetail"></div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h4>NexaBooks</h4>
+          <p>Des contenus de qualité pour un vrai développement personnel.</p>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="books.html">Catalogue</a></li>
+            <li><a href="checkout.html">Panier</a></li>
+            <li><a href="profile.html">Profil</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Confidentialité</a></li>
+            <li><a href="#">Conditions</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
