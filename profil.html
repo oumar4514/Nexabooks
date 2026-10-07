@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NexaBooks | Profil</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <div class="logo">NexaBooks</div>
+        <nav class="nav-links">
+          <a href="index.html">Accueil</a>
+          <a href="books.html">E-books</a>
+          <a href="checkout.html">Panier</a>
+          <a href="profile.html">Profil</a>
+        </nav>
+        <div class="nav-actions">
+          <a class="cart-btn" href="checkout.html">🛒 <span id="cartCount">0</span></a>
+          <a class="profile-btn" href="profile.html">Mon compte</a>
+          <button id="logoutBtn" class="logout-btn">Déconnexion</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container profile-page">
+      <div class="profile-box">
+        <h1>Mon compte</h1>
+        <div id="profileInfo" class="profile-info"></div>
+        <div class="profile-section">
+          <h2>Mes achats</h2>
+          <ul id="purchasedList" class="purchased-list"></ul>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
