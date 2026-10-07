@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaBooks - Plateforme de Vente d'E-books</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- PAGE D'AUTHENTIFICATION -->
+    <div id="authPage" class="auth-page">
+        <div class="auth-container">
+            <div class="auth-box">
+                <div class="auth-header">
+                    <h1>NexaBooks</h1>
+                    <p class="slogan">Lis. Apprends. Évolue. Construis ton avenir.</p>
+                </div>
+
+                <form id="registerForm" class="auth-form">
+                    <h2>Bienvenue sur NexaBooks</h2>
+                    <p class="auth-subtitle">Remplissez vos informations pour accéder à notre plateforme</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Prénom *</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Ex: Ahmed" required>
+                            <span class="error-msg"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Nom *</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Ex: Touareg" required>
+                            <span class="error-msg"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nationality">Nationalité *</label>
+                        <select id="nationality" name="nationality" required>
+                            <option value="">-- Sélectionnez votre nationalité --</option>
+                            <option value="Mali">Mali</option>
+                            <option value="Sénégal">Sénégal</option>
+                            <option value="Burkina Faso">Burkina Faso</option>
+                            <option value="Côte d'Ivoire">Côte d'Ivoire</option>
+                            <option value="Niger">Niger</option>
+                            <option value="Mauritanie">Mauritanie</option>
+                            <option value="Guinée">Guinée</option>
+                            <option value="Bénin">Bénin</option>
+                            <option value="Togo">Togo</option>
+                            <option value="Cameroun">Cameroun</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                        <span class="error-msg"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Numéro de téléphone *</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Ex: +223 93 42 67 01" required>
+                        <span class="error-msg"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Adresse e-mail *</label>
+                        <input type="email" id="email" name="email" placeholder="Ex: vous@example.com" required>
+                        <span class="error-msg"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Mot de passe *</label>
+                        <input type="password" id="password" name="password" placeholder="Minimum 6 caractères" required>
+                        <span class="error-msg"></span>
+                    </div>
+
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="acceptTerms" name="acceptTerms" required>
+                        <label for="acceptTerms">J'accepte les conditions d'utilisation et la politique de confidentialité *</label>
+                        <span class="error-msg"></span>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-large">Accéder à NexaBooks</button>
+
+                    <div class="auth-footer">
+                        <p>Vous avez déjà un compte ? <a href="#" class="toggle-login">Se connecter</a></p>
+                    </div>
+                </form>
+
+                <!-- FORMULAIRE DE CONNEXION -->
+                <form id="loginForm" class="auth-form hidden">
+                    <h2>Connexion</h2>
+
+                    <div class="form-group">
+                        <label for="loginEmail">Adresse e-mail *</label>
+                        <input type="email" id="loginEmail" name="email" placeholder="Votre e-mail" required>
+                        <span class="error-msg"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Mot de passe *</label>
+                        <input type="password" id="loginPassword" name="password" placeholder="Votre mot de passe" required>
+                        <span class="error-msg"></span>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-large">Se connecter</button>
+
+                    <div class="auth-footer">
+                        <p>Pas encore inscrit ? <a href="#" class="toggle-register">Créer un compte</a></p>
+                        <p><a href="#" class="forgot-password">Mot de passe oublié ?</a></p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="auth-image">
+                <div class="auth-card">
+                    <h3>📚 Apprendre</h3>
+                    <p>Des connaissances accessibles pour progresser</p>
+                </div>
+                <div class="auth-card">
+                    <h3>🧠 Comprendre</h3>
+                    <p>Des contenus pratiques et faciles à appliquer</p>
+                </div>
+                <div class="auth-card">
+                    <h3>🚀 Évoluer</h3>
+                    <p>Transformer les connaissances en actions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE PRINCIPALE DU SITE -->
+    <div id="mainPage" class="main-page hidden">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <h1>NexaBooks</h1>
+                    </div>
+                    <nav class="navbar">
+                        <a href="#accueil" class="nav-link">Accueil</a>
+                        <a href="#books" class="nav-link">E-books</a>
+                        <a href="#contact" class="nav-link">Contact</a>
+                    </nav>
+                    <div class="header-actions">
+                        <button class="btn-cart" id="cartBtn">
+                            🛒 Panier <span id="cartCount">0</span>
+                        </button>
+                        <button class="btn-profile" id="profileBtn">👤 Mon compte</button>
+                        <button class="btn-logout" id="logoutBtn">Déconnexion</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- SECTION HERO -->
+        <section class="hero" id="accueil">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Lis. Apprends. Évolue.</h1>
+                        <p>Découvrez notre collection exclusive d'e-books pour développer vos compétences et construire votre avenir</p>
+                        <a href="#books" class="btn-primary btn-large">Découvrir les e-books</a>
+                    </div>
+                    <div class="hero-image">
+                        <div class="book-showcase">
+                            📚
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION VALEURS -->
+        <section class="values">
+            <div class="container">
+                <h2 class="section-title">Pourquoi NexaBooks ?</h2>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon">📚</div>
+                        <h3>Apprendre</h3>
+                        <p>Des connaissances accessibles pour progresser à votre rythme</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🧠</div>
+                        <h3>Comprendre</h3>
+                        <p>Des contenus pratiques et faciles à appliquer au quotidien</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🚀</div>
+                        <h3>Évoluer</h3>
+                        <p>Transformer les connaissances en actions concrètes</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION E-BOOKS -->
+        <section class="books-section" id="books">
+            <div class="container">
+                <h2 class="section-title">Notre Catalogue d'E-books</h2>
+
+                <!-- FILTRES -->
+                <div class="filters">
+                    <input type="text" id="searchBooks" class="search-input" placeholder="Rechercher un e-book...">
+                    <div class="category-filters">
+                        <button class="filter-btn active" data-category="all">Tous</button>
+                        <button class="filter-btn" data-category="trading">Trading</button>
+                        <button class="filter-btn" data-category="business">Business</button>
+                        <button class="filter-btn" data-category="finance">Finance</button>
+                        <button class="filter-btn" data-category="personnel">Développement Personnel</button>
+                        <button class="filter-btn" data-category="motivation">Motivation</button>
+                        <button class="filter-btn" data-category="entrepreneuriat">Entrepreneuriat</button>
+                    </div>
+                </div>
+
+                <!-- GRILLE DE LIVRES -->
+                <div class="books-grid" id="booksGrid">
+                    <!-- Les livres seront ajoutés ici par JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>NexaBooks</h4>
+                        <ul>
+                            <li><a href="#about">À propos</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                            <li><a href="#blog">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Légal</h4>
+                        <ul>
+                            <li><a href="#privacy">Politique de confidentialité</a></li>
+                            <li><a href="#terms">Conditions d'utilisation</a></li>
+                            <li><a href="#legal">Mentions légales</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#faq">FAQ</a></li>
+                            <li><a href="#help">Centre d'aide</a></li>
+                            <li><a href="#contact">Nous contacter</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 NexaBooks. Tous droits réservés.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL PANIER -->
+    <div id="cartModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Votre Panier</h2>
+                <button class="close-modal" id="closeCartModal">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Les articles du panier seront ajoutés ici -->
+            </div>
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Sous-total:</span>
+                    <span id="subtotal">0,00 €</span>
+                </div>
+                <div class="summary-row">
+                    <span>Frais de traitement:</span>
+                    <span id="fees">0,00 €</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="total">0,00 €</span>
+                </div>
+            </div>
+            <div class="cart-actions">
+                <button class="btn-secondary" id="continueShopping">Continuer les achats</button>
+                <button class="btn-primary" id="checkoutBtn">Procéder au paiement</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DETAIL LIVRE -->
+    <div id="bookDetailModal" class="modal hidden">
+        <div class="modal-content book-detail">
+            <button class="close-modal" id="closeDetailModal">&times;</button>
+            <div id="bookDetailContent">
+                <!-- Le détail du livre sera ajouté ici -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PAIEMENT -->
+    <div id="paymentModal" class="modal hidden">
+        <div class="modal-content payment-modal">
+            <div class="modal-header">
+                <h2>Méthode de Paiement</h2>
+                <button class="close-modal" id="closePaymentModal">&times;</button>
+            </div>
+            <div class="payment-methods">
+                <div class="payment-method" data-method="orange-money">
+                    <div class="method-icon">📱</div>
+                    <h3>Orange Money</h3>
+                    <p>Paiement via Orange Money (Mali, Sénégal, etc.)</p>
+                    <input type="text" class="phone-input" placeholder="+223 XX XX XX XX">
+                </div>
+                <div class="payment-method" data-method="wave">
+                    <div class="method-icon">💳</div>
+                    <h3>Wave</h3>
+                    <p>Paiement via Wave (Afrique de l'Ouest)</p>
+                    <input type="text" class="phone-input" placeholder="+223 XX XX XX XX">
+                </div>
+                <div class="payment-method" data-method="moov">
+                    <div class="method-icon">📲</div>
+                    <h3>Moov Money</h3>
+                    <p>Paiement via Moov Money (Mali, Togo)</p>
+                    <input type="text" class="phone-input" placeholder="+223 XX XX XX XX">
+                </div>
+            </div>
+            <div class="payment-total">
+                <h3>Montant à payer: <span id="paymentAmount">0,00 €</span></h3>
+            </div>
+            <button class="btn-primary btn-large" id="confirmPaymentBtn">Confirmer le paiement</button>
+        </div>
+    </div>
+
+    <!-- MODAL PROFIL -->
+    <div id="profileModal" class="modal hidden">
+        <div class="modal-content profile-modal">
+            <div class="modal-header">
+                <h2>Mon Compte</h2>
+                <button class="close-modal" id="closeProfileModal">&times;</button>
+            </div>
+            <div class="profile-content">
+                <div class="profile-info">
+                    <h3>Mes Informations</h3>
+                    <p><strong>Prénom:</strong> <span id="profileFirstName"></span></p>
+                    <p><strong>Nom:</strong> <span id="profileLastName"></span></p>
+                    <p><strong>E-mail:</strong> <span id="profileEmail"></span></p>
+                    <p><strong>Nationalité:</strong> <span id="profileNationality"></span></p>
+                    <p><strong>Téléphone:</strong> <span id="profilePhone"></span></p>
+                </div>
+                <div class="profile-books">
+                    <h3>Mes E-books Achetés</h3>
+                    <div id="myBooksGrid">
+                        <!-- Les livres achetés seront affichés ici -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
