@@ -71,11 +71,7 @@
                     </div>
 
                     <div class="form-group checkbox">
-                        <!-- De -->
-<input type="checkbox" id="acceptTerms" name="acceptTerms" required>
-
-<!-- À -->
-<input type="checkbox" id="terms" name="acceptTerms" required>
+                        <input type="checkbox" id="acceptTerms" name="acceptTerms" required>
                         <label for="acceptTerms">J'accepte les conditions d'utilisation et la politique de confidentialité *</label>
                         <span class="error-msg"></span>
                     </div>
@@ -83,11 +79,10 @@
                     <button type="submit" class="btn-primary btn-large">Accéder à NexaBooks</button>
 
                     <div class="auth-footer">
-                        <p>Vous avez déjà un compte ? <a href="#" class="toggle-login">Se connecter</a></p>
+                        <p>Vous avez déjà un compte ? <a href="#" id="showLogin" class="toggle-login">Se connecter</a></p>
                     </div>
                 </form>
 
-                <!-- FORMULAIRE DE CONNEXION -->
                 <form id="loginForm" class="auth-form hidden">
                     <h2>Connexion</h2>
 
@@ -106,7 +101,7 @@
                     <button type="submit" class="btn-primary btn-large">Se connecter</button>
 
                     <div class="auth-footer">
-                        <p>Pas encore inscrit ? <a href="#" class="toggle-register">Créer un compte</a></p>
+                        <p>Pas encore inscrit ? <a href="#" id="showRegister" class="toggle-register">Créer un compte</a></p>
                         <p><a href="#" class="forgot-password">Mot de passe oublié ?</a></p>
                     </div>
                 </form>
@@ -129,9 +124,7 @@
         </div>
     </div>
 
-    <!-- PAGE PRINCIPALE DU SITE -->
     <div id="mainPage" class="main-page hidden">
-        <!-- HEADER -->
         <header class="header">
             <div class="container">
                 <div class="header-content">
@@ -144,9 +137,7 @@
                         <a href="#contact" class="nav-link">Contact</a>
                     </nav>
                     <div class="header-actions">
-                        <button class="btn-cart" id="cartBtn">
-                            🛒 Panier <span id="cartCount">0</span>
-                        </button>
+                        <button class="btn-cart" id="cartBtn">🛒 Panier <span id="cartCount">0</span></button>
                         <button class="btn-profile" id="profileBtn">👤 Mon compte</button>
                         <button class="btn-logout" id="logoutBtn">Déconnexion</button>
                     </div>
@@ -154,25 +145,21 @@
             </div>
         </header>
 
-        <!-- SECTION HERO -->
         <section class="hero" id="accueil">
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-text">
                         <h1>Lis. Apprends. Évolue.</h1>
-                        <p>Découvrez notre collection exclusive d'e-books pour développer vos compétences et construire votre avenir</p>
+                        <p>Découvrez notre collection exclusive d'e-books pour développer vos compétences et construire votre avenir.</p>
                         <a href="#books" class="btn-primary btn-large">Découvrir les e-books</a>
                     </div>
                     <div class="hero-image">
-                        <div class="book-showcase">
-                            📚
-                        </div>
+                        <div class="book-showcase">📚</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION VALEURS -->
         <section class="values">
             <div class="container">
                 <h2 class="section-title">Pourquoi NexaBooks ?</h2>
@@ -180,28 +167,25 @@
                     <div class="value-card">
                         <div class="value-icon">📚</div>
                         <h3>Apprendre</h3>
-                        <p>Des connaissances accessibles pour progresser à votre rythme</p>
+                        <p>Des connaissances accessibles pour progresser à votre rythme.</p>
                     </div>
                     <div class="value-card">
                         <div class="value-icon">🧠</div>
                         <h3>Comprendre</h3>
-                        <p>Des contenus pratiques et faciles à appliquer au quotidien</p>
+                        <p>Des contenus pratiques et faciles à appliquer au quotidien.</p>
                     </div>
                     <div class="value-card">
                         <div class="value-icon">🚀</div>
                         <h3>Évoluer</h3>
-                        <p>Transformer les connaissances en actions concrètes</p>
+                        <p>Transformer les connaissances en actions concrètes.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION E-BOOKS -->
         <section class="books-section" id="books">
             <div class="container">
                 <h2 class="section-title">Notre Catalogue d'E-books</h2>
-
-                <!-- FILTRES -->
                 <div class="filters">
                     <input type="text" id="searchBooks" class="search-input" placeholder="Rechercher un e-book...">
                     <div class="category-filters">
@@ -215,14 +199,10 @@
                     </div>
                 </div>
 
-                <!-- GRILLE DE LIVRES -->
-                <div class="books-grid" id="booksGrid">
-                    <!-- Les livres seront ajoutés ici par JavaScript -->
-                </div>
+                <div class="books-grid" id="booksGrid"></div>
             </div>
         </section>
 
-        <!-- FOOTER -->
         <footer class="footer">
             <div class="container">
                 <div class="footer-content">
@@ -258,16 +238,13 @@
         </footer>
     </div>
 
-    <!-- MODAL PANIER -->
     <div id="cartModal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Votre Panier</h2>
                 <button class="close-modal" id="closeCartModal">&times;</button>
             </div>
-            <div class="cart-items" id="cartItems">
-                <!-- Les articles du panier seront ajoutés ici -->
-            </div>
+            <div class="cart-items" id="cartItems"></div>
             <div class="cart-summary">
                 <div class="summary-row">
                     <span>Sous-total:</span>
@@ -289,17 +266,13 @@
         </div>
     </div>
 
-    <!-- MODAL DETAIL LIVRE -->
     <div id="bookDetailModal" class="modal hidden">
         <div class="modal-content book-detail">
             <button class="close-modal" id="closeDetailModal">&times;</button>
-            <div id="bookDetailContent">
-                <!-- Le détail du livre sera ajouté ici -->
-            </div>
+            <div id="bookDetailContent"></div>
         </div>
     </div>
 
-    <!-- MODAL PAIEMENT -->
     <div id="paymentModal" class="modal hidden">
         <div class="modal-content payment-modal">
             <div class="modal-header">
@@ -333,7 +306,6 @@
         </div>
     </div>
 
-    <!-- MODAL PROFIL -->
     <div id="profileModal" class="modal hidden">
         <div class="modal-content profile-modal">
             <div class="modal-header">
@@ -351,14 +323,12 @@
                 </div>
                 <div class="profile-books">
                     <h3>Mes E-books Achetés</h3>
-                    <div id="myBooksGrid">
-                        <!-- Les livres achetés seront affichés ici -->
-                    </div>
+                    <div id="myBooksGrid"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script"></script>
 </body>
 </html>
